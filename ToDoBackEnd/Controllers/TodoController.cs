@@ -23,9 +23,18 @@ namespace ToDoBackEnd.Controllers
         }
 
         [HttpPost("ajouter")]
-        public IActionResult Post(Todo task)
+        public IActionResult Post(Todo newTask)
         {
-            _service.Create(task.Name);
+            List<Todo> todoList = _service.GetAll().ToList();
+            foreach (Todo todo in todoList)
+            {
+                if(newTask.Name == todo.Name)
+                {
+                    return BadRequest("La tache existe déjà");
+                }
+            }
+
+            _service.Create(newTask.Name);
             return Ok();
         }
 
